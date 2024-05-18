@@ -18,6 +18,6 @@ RUN --mount=type=bind,source=package.json,target=package.json \
 
 COPY --chown=node:node . .
 
-EXPOSE 4000
+EXPOSE 3000
 
 CMD npm run dev
