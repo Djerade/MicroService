@@ -10,14 +10,16 @@ COPY package*.json ./
 
 USER node
 
-# RUN npm install
+
+# sRUN npm install
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
     npm ci --omit=dev
 
 COPY --chown=node:node . .
+# RUN  npx prisma db push
 
 EXPOSE 3000
 
-CMD npm run dev
+CMD  npm run dev

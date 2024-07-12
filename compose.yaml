@@ -1,11 +1,77 @@
-version: "3.8"
 services:
+
   server:
     build:
-      context: /web
+      context: ./web
     restart: always
     command: npm run dev
     environment:
-      NODE_ENV: production
+      # NODE_ENV: production
+      - DATABASE_HOST=db
+      - DATABASE_PORT=5432
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=postgres
+      - DATABASE_NAME=mydatabase
     ports:
       - 3000:3000
+
+
+  postgres_db:
+    image: postgres:13
+    container_name: DataBase
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: mydatabase
+    volumes:
+        - postgres_db:/var/lib/postgresql/data
+    ports:
+        - '5432:5432'
+
+
+
+volumes:
+    postgres_db:
+        driver: local
+
+
+  # firewall:
+  #   build:
+  #     context: /parefeu
+  #   network_mode: "host"
+  #   cap_add:
+  #     - NET_ADMIN
+
+
+
+  # mail:
+  #   build: 
+  #     context: /mail
+  #   container_name: mailserver
+  #   ports:
+  #     - "25:25"
+  #     - "587:587"
+  #     - "993:993"
+  #     - "995:995"
+  #   volumes:
+  #     - maildata:/var/mail
+  #     - ./config/postfix:/etc/postfix
+  #     - ./config/dovecot:/etc/dovecot
+  #     - ./config/opendkim:/etc/opendkim
+  #     - ./config/supervisor:/etc/supervisor/conf.d
+  #   environment:
+  #     - POSTFIX_MYHOSTNAME=mail.example.com
+  #     - POSTFIX_MYDOMAIN=example.com
+  #   networks:
+  #     - mailnet
+
+
+# networks:
+#   network_firewall_server:
+#     driver: bridge
+#   mailnet:
+#     driver: bridge
+
+
+
